@@ -1,0 +1,1 @@
+jdk-11.0.2\bin\java --module-path javafx-sdk-11.0.2\lib --add-modules=javafx.controls,javafx.fxml -jar out\artifacts\BattleShip2_jar\BattleShip2.jar

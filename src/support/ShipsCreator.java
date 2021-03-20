@@ -1,10 +1,7 @@
 package support;
 
 import ocean.Ocean;
-import ships.Battleship;
-import ships.Cruiser;
-import ships.Destroyer;
-import ships.Submarine;
+import ships.*;
 
 import java.util.Random;
 
@@ -13,94 +10,66 @@ import java.util.Random;
  * It helps to put ships in ocean
  */
 public class ShipsCreator {
-    private static Random random = new Random();
+    private static final Random random = new Random();
 
     /**
      * This method puts Battleship
+     *
      * @param ocean ocean there method will put Battleship
      */
-    public static void putBattleship(Ocean ocean){
-        Battleship battleship = new Battleship();
-        int row, column;
-        boolean horizontal;
-        boolean checkbattleship;
-        do{
-            row = (int)(Math.random() * 10);
-            column = (int)(Math.random() * 10);
-            horizontal = random.nextBoolean();
-            checkbattleship = battleship.okToPlaceShipAt(row, column, horizontal, ocean);
-            if(checkbattleship){
-                battleship.placeShipAt(row, column, horizontal, ocean);
-            }
-        } while (!checkbattleship);
+    public static void putBattleship(Ocean ocean) {
+        putShip(ocean, new Battleship());
     }
 
     /**
      * This method puts Cruisers
+     *
      * @param ocean ocean there method will put Cruisers
      */
-    public static void putCruiser(Ocean ocean){
-        Cruiser cruiser;
-        int row, column;
-        boolean horizontal;
-        boolean checkcruiser;
-        for(int i = 0; i < 2; i++){
-            cruiser = new Cruiser();
-            do{
-                row = (int)(Math.random() * 10);
-                column = (int)(Math.random() * 10);
-                horizontal = random.nextBoolean();
-                checkcruiser = cruiser.okToPlaceShipAt(row, column, horizontal, ocean);
-                if(checkcruiser){
-                    cruiser.placeShipAt(row, column, horizontal, ocean);
-                }
-            } while (!checkcruiser);
-        }
+    public static void putCruiser(Ocean ocean) {
+        for (int i = 0; i < 2; i++)
+            putShip(ocean, new Cruiser());
     }
 
     /**
      * This method puts Destroyers
+     *
      * @param ocean ocean there method will put Destroyers
      */
-    public static void putDestroyer(Ocean ocean){
-        Destroyer destroyer;
-        int row, column;
-        boolean horizontal;
-        boolean checkdestroyer;
-        for(int i = 0; i < 3; i++){
-            destroyer = new Destroyer();
-            do{
-                row = (int)(Math.random() * 10);
-                column = (int)(Math.random() * 10);
-                horizontal = random.nextBoolean();
-                checkdestroyer = destroyer.okToPlaceShipAt(row, column, horizontal, ocean);
-                if(checkdestroyer){
-                    destroyer.placeShipAt(row, column, horizontal, ocean);
-                }
-            } while (!checkdestroyer);
-        }
+    public static void putDestroyer(Ocean ocean) {
+        for (int i = 0; i < 3; i++)
+            putShip(ocean, new Destroyer());
     }
 
     /**
      * This method puts Submarines
+     *
      * @param ocean ocean there method will put Submarines
      */
-    public static void putSubmarine(Ocean ocean){
-        Submarine submarine;
-        int row, column;
+    public static void putSubmarine(Ocean ocean) {
+        for (int i = 0; i < 4; i++)
+            putShip(ocean, new Submarine());
+    }
+
+    /**
+     * This method puts in ocean
+     *
+     * @param ocean ocean there method will put ship
+     * @param ship  ship that will be put in ocean
+     */
+    private static void putShip(Ocean ocean, Ship ship) {
+        int row;
+        int column;
         boolean horizontal;
-        boolean checksubmarine;
-        for(int i = 0; i < 4; i++){
-            submarine = new Submarine();
-            do{
-                row = (int)(Math.random() * 10);
-                column = (int)(Math.random() * 10);
-                horizontal = random.nextBoolean();
-                checksubmarine = submarine.okToPlaceShipAt(row, column, horizontal, ocean);
-                if(checksubmarine){
-                    submarine.placeShipAt(row, column, horizontal, ocean);
-                }
-            } while (!checksubmarine);
-        }
+        boolean checkShip;
+        do {
+            row = (int) (Math.random() * 10);
+            column = (int) (Math.random() * 10);
+            horizontal = random.nextBoolean();
+            checkShip = ship.okToPlaceShipAt(row, column, horizontal, ocean);
+            if (ship.okToPlaceShipAt(row, column, horizontal, ocean)) {
+                ship.placeShipAt(row, column, horizontal, ocean);
+            }
+        } while (!checkShip);
     }
 }

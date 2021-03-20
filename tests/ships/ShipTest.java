@@ -1,115 +1,104 @@
 package ships;
 
 import ocean.Ocean;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 class ShipTest {
 
-    @org.junit.jupiter.api.Test
-    void getLength() {
+    @Test
+    void getLengthTest() {
         Ship b = new Battleship();
         Ship c = new Cruiser();
         Ship d = new Destroyer();
         Ship s = new Submarine();
-        assert (b.getLength() == 4);
-        assert (c.getLength() == 3);
-        assert (d.getLength() == 2);
-        assert (s.getLength() == 1);
+        Assertions.assertEquals(4, b.getLength());
+        Assertions.assertEquals(3, c.getLength());
+        Assertions.assertEquals(2, d.getLength());
+        Assertions.assertEquals(1, s.getLength());
     }
 
-    @org.junit.jupiter.api.Test
-    void getBowRow() {
+    @Test
+    void getBowRowTest() {
         Ship ship = new Ship();
         ship.setBowRow(4);
-        assert (ship.getBowRow() == 4);
+        Assertions.assertEquals(4, ship.getBowRow());
     }
 
-    @org.junit.jupiter.api.Test
-    void getBowColumn() {
+    @Test
+    void getBowColumnTest() {
         Ship ship = new Ship();
         ship.setBowColumn(4);
-        assert (ship.getBowColumn() == 4);
+        Assertions.assertEquals(4, ship.getBowColumn());
     }
 
-    @org.junit.jupiter.api.Test
-    void isHorizontal() {
+    @Test
+    void isHorizontalTest() {
         Ship ship = new Ship();
         ship.setHorizontal(true);
-        assert (ship.isHorizontal());
+        Assertions.assertTrue(ship.isHorizontal());
     }
 
-    @org.junit.jupiter.api.Test
-    void setBowRow() {
+    @Test
+    void setBowRowTest() {
         Ship ship = new Ship();
         ship.setBowRow(4);
-        assert (ship.getBowRow() == 4);
+        Assertions.assertEquals(4, ship.getBowRow());
     }
 
-    @org.junit.jupiter.api.Test
-    void setBowColumn() {
+    @Test
+    void setBowColumnTest() {
         Ship ship = new Ship();
         ship.setBowColumn(4);
-        assert (ship.getBowColumn() == 4);
+        Assertions.assertEquals(4, ship.getBowColumn());
     }
 
-    @org.junit.jupiter.api.Test
-    void setHorizontal() {
+    @Test
+    void setHorizontalTest() {
         Ship ship = new Ship();
         ship.setHorizontal(true);
-        assert (ship.isHorizontal());
+        Assertions.assertTrue(ship.isHorizontal());
     }
 
-    @org.junit.jupiter.api.Test
-    void okToPlaceShipAt() {
+    @Test
+    void okToPlaceShipAtTest() {
         Ocean ocean = new Ocean();
         Ship ship = new Battleship();
-        assert (ship.okToPlaceShipAt(1,1,true, ocean));
-        assert (!ship.okToPlaceShipAt(9,9,true, ocean));
+        Assertions.assertTrue(ship.okToPlaceShipAt(1, 1, true, ocean));
+        Assertions.assertFalse(ship.okToPlaceShipAt(9, 9, true, ocean));
     }
 
-    @org.junit.jupiter.api.Test
-    void placeShipAt() {
+    @Test
+    void placeShipAtTest() {
         Ocean ocean = new Ocean();
         Ship battleship = new Battleship();
         battleship.placeShipAt(1, 2, true, ocean);
-        assert (battleship.getBowRow() == 1);
-        assert (battleship.getBowColumn() == 2);
-        assert (battleship.isHorizontal());
+        Assertions.assertEquals(1, battleship.getBowRow());
+        Assertions.assertEquals(2, battleship.getBowColumn());
+        Assertions.assertTrue(battleship.isHorizontal());
     }
 
-    @org.junit.jupiter.api.Test
-    void shootAt() {
+    @Test
+    void isSunkAndShootAtTest() {
         Ocean ocean = new Ocean();
         Ship ship = new Submarine();
         ship.placeShipAt(1, 1, true, ocean);
-        assert (!ship.isSunk());
-        ship.shootAt(1,1, ocean);
-        assert (ship.isSunk());
+        Assertions.assertFalse(ship.isSunk());
+        ship.shootAt(1, 1, ocean);
+        Assertions.assertTrue(ship.isSunk());
     }
 
-    @org.junit.jupiter.api.Test
-    void isSunk() {
-        Ocean ocean = new Ocean();
-        Ship ship = new Submarine();
-        ship.placeShipAt(1, 1, true, ocean);
-        assert (!ship.isSunk());
-        ship.shootAt(1,1, ocean);
-        assert (ship.isSunk());
-    }
-
-    @org.junit.jupiter.api.Test
-    void getShipType() {
+    @Test
+    void getShipTypeTest() {
         Ship b = new Battleship();
         Ship c = new Cruiser();
         Ship d = new Destroyer();
         Ship s = new Submarine();
         Ship e = new EmptySea();
-        assert (b.getShipType().equals("battleship"));
-        assert (c.getShipType().equals("cruiser"));
-        assert (d.getShipType().equals("destroyer"));
-        assert (s.getShipType().equals("submarine"));
-        assert (e.getShipType().equals("emptysea"));
+        Assertions.assertEquals("battleship", b.getShipType());
+        Assertions.assertEquals("cruiser", c.getShipType());
+        Assertions.assertEquals("destroyer", d.getShipType());
+        Assertions.assertEquals("submarine", s.getShipType());
+        Assertions.assertEquals("emptysea", e.getShipType());
     }
-
 }

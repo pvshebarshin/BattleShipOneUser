@@ -1,12 +1,10 @@
 package sample;
 
-import javafx.css.Style;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import ocean.Ocean;
 
@@ -31,12 +29,13 @@ public class Controller {
     TextArea messeges = new TextArea();
     @FXML
     private Label stat;
+
     @FXML
     private void initialize() {
         ocean.placeAllShipsRandomly();
         stat.setText("Hits - 0\n" +
                 "Shoots - 0\n" +
-                "Dead ships - 0\n"+
+                "Dead ships - 0\n" +
                 "Alive ships - 10");
         messeges.setText("Welcome to Battleship game!\n" +
                 "To start the game without a mouse, click Control\n");
@@ -44,8 +43,8 @@ public class Controller {
         columnText.requestFocus();
     }
 
-    void ifEndOfGame(){
-        if(ocean.isGameOver()){
+    void ifEndOfGame() {
+        if (ocean.isGameOver()) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Information");
             Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -57,66 +56,60 @@ public class Controller {
     }
 
     public void onClick(ActionEvent actionEvent) {
-        if(ocean.isGameOver())
+        if (ocean.isGameOver())
             return;
         Button clickedButton = ((Button) actionEvent.getSource());
         String data = clickedButton.getId();
         data = data.substring(3);
         row = Character.getNumericValue(data.charAt(0));
         column = Character.getNumericValue(data.charAt(1));
-        if(!clickedButton.getStyle().equals(style)){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image("images/icon.png"));
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("No point shooting here");
-            alert.showAndWait();
+        if (!clickedButton.getStyle().equals(style)) {
+            showMessage("No point shooting here");
             return;
         }
-        if(ocean.shootAt(row, column)){
+        if (ocean.shootAt(row, column)) {
             clickedButton.setStyle("-fx-background-color: red");
-            messeges.appendText("(" + row + "," + column +") - Hit!!!\n");
-            if(currentDeadShips < ocean.getShipsSunk()){
+            messeges.appendText("(" + row + "," + column + ") - Hit!!!\n");
+            if (currentDeadShips < ocean.getShipsSunk()) {
                 currentDeadShips++;
                 clickedButton.setStyle("-fx-background-color: black");
-                messeges.appendText("You destroyed " + ocean.ships[row][column].getShipType()+'\n');
+                messeges.appendText("You destroyed " + ocean.ships[row][column].getShipType() + '\n');
             }
-        }else{
+        } else {
             clickedButton.setStyle("-fx-background-color: yellow");
-            messeges.appendText("(" + row + "," + column +") - Miss...\n");
+            messeges.appendText("(" + row + "," + column + ") - Miss...\n");
         }
         printStat();
         ifEndOfGame();
     }
 
-    void printStat(){
+    void printStat() {
         stat.setText("Hits - " + ocean.getHitCount() + "\n" +
                 "Shoots - " + ocean.getShotsFired() + "\n" +
-                "Dead ships - " + ocean.getShipsSunk() + "\n"+
+                "Dead ships - " + ocean.getShipsSunk() + "\n" +
                 "Alive ships - " + (10 - ocean.getShipsSunk()));
     }
 
     public void onPress(ActionEvent actionEvent) {
-        if(ocean.isGameOver())
+        if (ocean.isGameOver())
             return;
-        if(!checkText(rowText.getText()) || !checkText(columnText.getText()))
+        if (!checkText(rowText.getText()) || !checkText(columnText.getText()))
             return;
         int inputRow = Integer.parseInt(rowText.getText());
         int inputColumn = Integer.parseInt(columnText.getText());
-        if(ocean.shootAt(inputRow, inputColumn)){
-            Button clickedButton = (Button) Main.globalRoot.lookup("#btn"+inputRow+inputColumn);
+        if (ocean.shootAt(inputRow, inputColumn)) {
+            Button clickedButton = (Button) Main.globalRoot.lookup("#btn" + inputRow + inputColumn);
             clickedButton.setStyle("-fx-background-color: red");
-            messeges.appendText("(" + inputRow + "," + inputColumn +") - Hit!!!\n");
-            if(currentDeadShips < ocean.getShipsSunk()){
+            messeges.appendText("(" + inputRow + "," + inputColumn + ") - Hit!!!\n");
+            if (currentDeadShips < ocean.getShipsSunk()) {
                 currentDeadShips++;
                 clickedButton.setStyle("-fx-background-color: black");
-                messeges.appendText("You destroyed " + ocean.ships[inputRow][inputColumn].getShipType()+'\n');
+                messeges.appendText("You destroyed " + ocean.ships[inputRow][inputColumn].getShipType() + '\n');
             }
-        }else{
-            Button clickedButton = (Button) Main.globalRoot.lookup("#btn"+inputRow+inputColumn);
+        } else {
+            Button clickedButton = (Button) Main.globalRoot.lookup("#btn" + inputRow + inputColumn);
             clickedButton.setStyle("-fx-background-color: yellow");
-            messeges.appendText("(" + inputRow + "," + inputColumn +") - Miss...\n");
+            messeges.appendText("(" + inputRow + "," + inputColumn + ") - Miss...\n");
         }
         rowText.setText("");
         columnText.setText("");
@@ -124,57 +117,49 @@ public class Controller {
         ifEndOfGame();
     }
 
-    static boolean checkText(String str){
+    static boolean checkText(String str) {
         try {
             int res;
             res = Integer.parseInt(str);
-            if(res < 0 || res > 9) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-                stage.getIcons().add(new Image("images/icon.png"));
-                alert.setTitle("Information");
-                alert.setHeaderText(null);
-                alert.setContentText("Number must be in segment [0;9]");
-                alert.showAndWait();
+            if (res < 0 || res > 9) {
+                showMessage("Number must be in segment [0;9]");
                 return false;
             }
             return true;
-        } catch (Exception ex){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image("images/icon.png"));
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("You wrote incorrect data");
-            alert.showAndWait();
+        } catch (Exception ex) {
+            showMessage("You wrote incorrect data");
             return false;
         }
     }
 
+    private static void showMessage(String s) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image("images/icon.png"));
+        alert.setTitle("Information");
+        alert.setHeaderText(null);
+        alert.setContentText(s);
+        alert.showAndWait();
+    }
+
     public void onRowEnter(ActionEvent actionEvent) {
-        if(ocean.isGameOver())
+        if (ocean.isGameOver())
             return;
-        if(!checkText(rowText.getText()))
+        if (!checkText(rowText.getText()))
             return;
         _row = Integer.parseInt(rowText.getText());
         columnText.requestFocus();
     }
 
     public void onColumnClick(ActionEvent actionEvent) {
-        if(ocean.isGameOver())
+        if (ocean.isGameOver())
             return;
-        if(!checkText(columnText.getText()))
+        if (!checkText(columnText.getText()))
             return;
         _column = Integer.parseInt(columnText.getText());
-        Button clickedButton = (Button) Main.globalRoot.lookup("#btn"+_row+_column);
-        if(!clickedButton.getStyle().equals(style)){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
-            stage.getIcons().add(new Image("images/icon.png"));
-            alert.setTitle("Information");
-            alert.setHeaderText(null);
-            alert.setContentText("No point shooting here");
-            alert.showAndWait();
+        Button clickedButton = (Button) Main.globalRoot.lookup("#btn" + _row + _column);
+        if (!clickedButton.getStyle().equals(style)) {
+            showMessage("No point shooting here");
             rowText.requestFocus();
             rowText.setText("");
             columnText.setText("");
@@ -183,19 +168,19 @@ public class Controller {
         rowText.requestFocus();
 
 
-        if(ocean.shootAt(_row, _column)){
-            clickedButton = (Button) Main.globalRoot.lookup("#btn"+_row+_column);
+        if (ocean.shootAt(_row, _column)) {
+            clickedButton = (Button) Main.globalRoot.lookup("#btn" + _row + _column);
             clickedButton.setStyle("-fx-background-color: red");
-            messeges.appendText("(" + _row + "," + _column +") - Hit!!!\n");
-            if(currentDeadShips < ocean.getShipsSunk()){
+            messeges.appendText("(" + _row + "," + _column + ") - Hit!!!\n");
+            if (currentDeadShips < ocean.getShipsSunk()) {
                 currentDeadShips++;
                 clickedButton.setStyle("-fx-background-color: black");
-                messeges.appendText("You destroyed " + ocean.ships[_row][_column].getShipType()+'\n');
+                messeges.appendText("You destroyed " + ocean.ships[_row][_column].getShipType() + '\n');
             }
-        }else{
-            clickedButton = (Button) Main.globalRoot.lookup("#btn"+_row+_column);
+        } else {
+            clickedButton = (Button) Main.globalRoot.lookup("#btn" + _row + _column);
             clickedButton.setStyle("-fx-background-color: yellow");
-            messeges.appendText("(" + _row + "," + _column +") - Miss...\n");
+            messeges.appendText("(" + _row + "," + _column + ") - Miss...\n");
         }
         rowText.setText("");
         columnText.setText("");
